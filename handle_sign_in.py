@@ -22,11 +22,13 @@ app.config.update(
 # Cambia la configuración de CORS por esta más robusta
 CORS(app, resources={
     r"/*": {
-        "origins": ["https://repollo458.github.io/pr3_web/"], # Pon aquí tu URL de GitHub Pages
-        "supports_credentials": True
+        "origins": ["https://repollo458.github.io/pr3_web"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+        "supports_credentials": True,
+        "expose_headers": ["Set-Cookie"]
     }
 })
-
 DATABASE_URL = "postgresql://neondb_owner:npg_AGfr1VQl2dib@ep-restless-lab-al6gks8u-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 
 def get_db_connection():
