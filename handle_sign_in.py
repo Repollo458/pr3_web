@@ -22,7 +22,7 @@ app.config.update(
 # Cambia la configuración de CORS por esta más robusta
 CORS(app, resources={
     r"/*": {
-        "origins": ["https://repollo458.github.io/pr3_web"],
+        "origins": ["https://repollo458.github.io"],
         "methods": ["GET", "POST", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
         "supports_credentials": True,
