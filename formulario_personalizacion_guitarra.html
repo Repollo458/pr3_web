@@ -8,12 +8,8 @@
 <base target="_blank">
 </head>
 <body>
-    <!-- =========================================
-         BARRA DE NAVEGACIÓN SUPERIOR
-         ========================================= -->
     <nav class="barra-superior">
         <div class="barra-contenido">
-            <!-- Usuario -->
             <div class="barra-usuario">
                 <span class="usuario-icono">◈</span>
                 <span class="usuario-nombre" id="nombre-usuario">Invitado</span>
@@ -21,16 +17,12 @@
                     Salir
                 </button>
             </div>
-            
-            <!-- Carrito -->
             <div class="barra-carrito">
                 <button type="button" class="btn-carrito" id="btn-carrito" onclick="toggleCarrito()">
                     <span class="carrito-icono">🛒</span>
                     <span class="carrito-texto">Carrito</span>
                     <span class="carrito-contador" id="contador-carrito">0</span>
                 </button>
-                
-                <!-- Panel desplegable del carrito -->
                 <div class="panel-carrito" id="panel-carrito">
                     <div class="carrito-header">
                         <h3>Tu Configuración</h3>
@@ -105,7 +97,6 @@
             <fieldset class="grupo-configuracion" id="grupo-mastil">
                 <legend><h2 data-step="3">Configuración del Mástil</h2></legend>
 
-                <!-- Tensores -->
                 <div class="subgrupo">
                     <h3>Sistema de Clavijas</h3>
                     <div class="opciones-radio" role="radiogroup" aria-label="Tipo de Clavija">
@@ -113,7 +104,7 @@
                             <input type="radio" name="clavijas" value="Vintage" id="clavija_vintage" checked required>
                             <div class="tarjeta-contenido">
                                 <img src="imgs/tensor_K.png" alt="Clavija tipo Kluson">
-                                <span>Vintaje</span>
+                                <span>Vintage</span>
                             </div>
                         </label>
 
@@ -135,10 +126,7 @@
                     </div>
                 </div>
 
-                <!-- ENVOLTORIO NUEVO PARA LAS 2 COLUMNAS -->
                 <div class="contenedor-columnas">
-
-                    <!-- Cuerdas -->
                     <div class="subgrupo">
                         <h3>Número de Cuerdas</h3>
                         <div class="opciones-radio" role="radiogroup" aria-label="Número de cuerdas">
@@ -149,10 +137,8 @@
                             </label>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Material del diapasón (CON TEXTURAS REALES) -->
                 <div class="subgrupo">
                     <h3>Material del Diapasón</h3>
                     <div class="selector-materiales" role="radiogroup" aria-label="Material del diapasón">
@@ -219,7 +205,6 @@
                     </div>
                 </div>
 
-                <!-- Acabado -->
                 <div class="subgrupo">
                     <h3>Tipo de Acabado</h3>
                     <div class="grid-acabado">
@@ -285,10 +270,9 @@
                 </label>
                 </div>
 
-                <!-- Grabado personalizado -->
                 <div class="subgrupo campo-grabado">
                     <h3>Grabado en el mástil (opcional)</h3>
-                    <input type="text" name="grabado" id="grabado" 
+                    <input type="text" name="grabado" id="grabado"
                            maxlength="20" placeholder="Tu nombre o texto (máx. 20 caracteres)"
                            pattern="[A-Za-z0-9\s\-]{0,20}">
                     <small>Solo letras, números y guiones.</small>
@@ -314,7 +298,7 @@
                     </div>
                     <div class="resumen-item">
                         <span class="resumen-label">Tensores:</span>
-                        <span class="resumen-valor" id="resumen-tensor">Vintage Kluson</span>
+                        <span class="resumen-valor" id="resumen-tensor">Vintage</span>
                     </div>
                     <div class="resumen-item">
                         <span class="resumen-label">Cuerdas:</span>
@@ -337,8 +321,7 @@
                         <span class="resumen-valor" id="resumen-precio">1.299 €</span>
                     </div>
                 </div>
-                
-                <!-- Botón añadir al carrito -->
+
                 <div class="acciones-carrito-form">
                     <button type="button" class="btn-primario" id="btn-anadir-carrito" onclick="anadirAlCarrito()">
                         <span class="btn-icono">+</span>
@@ -355,32 +338,19 @@
 
     <script>
 
-        // =========================================
-        // GESTIÓN DEL USUARIO — Verificar sesión con Flask
-        // =========================================
-
-        const API_URL = "https://pr3-web.onrender.com";  // URL de tu Flask
+        const API_URL = "https://pr3-web.onrender.com";
 
         async function cargarUsuario() {
             const nombreElement = document.getElementById('nombre-usuario');
             const logoutBtn = document.getElementById('btn-logout');
-            
-            // 1. Intentar primero con localStorage (más fiable en archivos locales)
             const usuarioLocal = localStorage.getItem('guitarUser');
-            
             if (usuarioLocal) {
                 nombreElement.textContent = usuarioLocal;
                 if (logoutBtn) logoutBtn.style.display = 'inline-block';
             }
-
-            // 2. Intentar sincronizar con el servidor de fondo
             try {
-                const respuesta = await fetch(`${API_URL}/me`, {
-                    method: 'GET',
-                    credentials: 'include'
-                });
+                const respuesta = await fetch(`${API_URL}/me`, { method: 'GET', credentials: 'include' });
                 const datos = await respuesta.json();
-                
                 if (datos.logged_in && datos.user) {
                     const nombreMostrar = datos.user.nombre || datos.user.username;
                     nombreElement.textContent = nombreMostrar;
@@ -392,48 +362,40 @@
             }
         }
 
-        // Función para cerrar sesión
         function cerrarSesion() {
-            // Limpiar localStorage
             localStorage.removeItem('guitarUser');
             localStorage.removeItem('guitarUserId');
-            
-            // Llamar a Flask para cerrar sesión en el servidor
-            fetch(`${API_URL}/logout`, {
-                method: 'POST',
-                credentials: 'include'
-            }).finally(() => {
-                // Redirigir al login
+            fetch(`${API_URL}/logout`, { method: 'POST', credentials: 'include' }).finally(() => {
                 window.location.href = 'login.html';
             });
         }
-        
+
         let carrito = [];
-        
+
         function toggleCarrito() {
             const panel = document.getElementById('panel-carrito');
             panel.classList.toggle('activo');
         }
-        
+
         function actualizarCarritoUI() {
             const contador = document.getElementById('contador-carrito');
             const itemsContainer = document.getElementById('carrito-items');
             const vacioMsg = document.getElementById('carrito-vacio');
             const footer = document.getElementById('carrito-footer');
             const totalPrecio = document.getElementById('carrito-total-precio');
-            
+
             contador.textContent = carrito.length;
-            
+
             if (carrito.length === 0) {
                 vacioMsg.style.display = 'block';
                 itemsContainer.innerHTML = '';
                 footer.style.display = 'none';
                 return;
             }
-            
+
             vacioMsg.style.display = 'none';
             footer.style.display = 'block';
-            
+
             let total = 0;
             itemsContainer.innerHTML = carrito.map((item, index) => {
                 total += item.precio;
@@ -450,19 +412,17 @@
                     </div>
                 `;
             }).join('');
-            
+
             totalPrecio.textContent = total.toLocaleString('es-ES') + ' €';
         }
-        
+
         function anadirAlCarrito() {
             const precioTexto = document.getElementById('resumen-precio').textContent;
             const precio = parseInt(precioTexto.replace(/\D/g, ''));
 
-            // Leemos los valores CRUDOS del formulario (no los textos del resumen)
             const fd = new FormData(form);
             const datos = Object.fromEntries(fd);
 
-            // Configuración de pastillas: recogemos cada select dinámico con su posición
             const selectsPastillas = contenedorDinamico.querySelectorAll('select');
             const numPastillas = selectsPastillas.length;
             const configPastillas = [];
@@ -472,17 +432,14 @@
             });
 
             const config = {
-                // Campos que van directos al JSON del pedido
-                tipo:        datos.cuerpo || '',                       // tipoPedido (Forma)
-                madera:      datos.diapason || '',                     // maderaPedido
-                color:       datos.color_cuerpo || '',                 // colorPedido (cuerpo)
-                acabado:     datos.acabado || '',                      // acabadoPedido
-                pastilla:    configPastillas.join(' | '),              // pastillaPedido
-                clavija:     datos.clavijas || '',                     // clavijaPedido
-                inscripcion: (datos.grabado || '').trim(),             // InscripcionPedido
+                tipo:        datos.cuerpo || '',
+                madera:      datos.diapason || '',
+                color:       datos.color_cuerpo || '',
+                acabado:     datos.acabado || '',
+                pastilla:    configPastillas.join(' | '),
+                clavija:     datos.clavijas || '',
+                inscripcion: (datos.grabado || '').trim(),
                 precio:      precio,
-
-                // Datos extra que no van en el formato JSON pero conviene guardar
                 detalles: {
                     colorMastil: datos.color_mastil || '',
                     cuerdas:     datos.cuerdas || '',
@@ -492,7 +449,7 @@
 
             carrito.push(config);
             actualizarCarritoUI();
-            
+
             const btn = document.getElementById('btn-anadir-carrito');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<span class="btn-icono">✓</span> Añadido';
@@ -502,29 +459,28 @@
                 btn.style.background = '';
             }, 1500);
         }
-        
+
         function eliminarDelCarrito(index) {
             carrito.splice(index, 1);
             actualizarCarritoUI();
         }
-        
+
         async function finalizarPedido() {
             if (carrito.length === 0) {
                 alert("El carrito está vacío");
                 return;
             }
 
-            // Enviamos la primera guitarra del carrito.
             const item = carrito[0];
 
             const datosPedido = {
-                tipo:        item.tipo,         // tipoPedido (Forma)
-                madera:      item.madera,       // maderaPedido
-                color:       item.color,        // colorPedido
-                acabado:     item.acabado,      // acabadoPedido
-                pastilla:    item.pastilla,     // pastillaPedido
-                clavija:     item.clavija,      // clavijaPedido
-                inscripcion: item.inscripcion,  // InscripcionPedido
+                tipo:        item.tipo,
+                madera:      item.madera,
+                color:       item.color,
+                acabado:     item.acabado,
+                pastilla:    item.pastilla,
+                clavija:     item.clavija,
+                inscripcion: item.inscripcion,
                 precio:      item.precio,
                 detalles:    JSON.stringify(item.detalles)
             };
@@ -533,7 +489,7 @@
                 const respuesta = await fetch(`${API_URL}/pedido`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include', // CRÍTICO: Para enviar la cookie de sesión
+                    credentials: 'include',
                     body: JSON.stringify(datosPedido)
                 });
 
@@ -541,9 +497,9 @@
 
                 if (respuesta.ok) {
                     alert(`¡Pedido realizado con éxito! ID: ${resultado.pedido_id}`);
-                    carrito = []; // Vaciar carrito
+                    carrito = [];
                     actualizarCarritoUI();
-                    toggleCarrito(); // Cerrar panel
+                    toggleCarrito();
                 } else {
                     alert("Error: " + resultado.error);
                 }
@@ -552,7 +508,7 @@
                 alert("No se pudo conectar con el servidor.");
             }
         }
-        
+
         document.addEventListener('click', (e) => {
             const carritoContainer = document.querySelector('.barra-carrito');
             if (!carritoContainer.contains(e.target)) {
@@ -560,15 +516,12 @@
             }
         });
 
-        // =========================================
-        // RESTO DEL SCRIPT ORIGINAL
-        // =========================================
         const form = document.getElementById('configurador-guitarra');
 
         const textos = {
-            cuerpo: { stratocaster: 'Stratocaster', telecaster: 'Telecaster', lespaul: 'Les Paul' },
-            tensor: { 'Vintaje': 'Vintaje', 'Moderno': 'Moderno', 'Locking': 'Locking' },
-            diapason: { arce: 'Arce', palorosa: 'Palorosa', ebano: 'Ébano', pauferro: 'Pau Ferro', richlite: 'Richlite' },
+            cuerpo: { 'Stratocaster': 'Stratocaster', 'Telecaster': 'Telecaster', 'LesPaul': 'Les Paul' },
+            tensor: { 'Vintage': 'Vintage', 'Moderno': 'Moderno', 'Locking': 'Locking' },
+            diapason: { 'Ebano': 'Ebano', 'Palorosa': 'Palorosa', 'Abeto': 'Abeto' },
             acabado: { brillo: 'Brillo', satin: 'Satinado', mate: 'Mate', relic: 'Relic' },
             tipo_pastilla: { 'P-90': 'P-90', 'SingleCoil': 'SingleCoil', 'Humbucker': 'Humbucker' }
         };
@@ -597,7 +550,7 @@
         function renderizarPastillasDinamicas() {
             const selectsActuales = contenedorDinamico.querySelectorAll('select');
             const valoresGuardados = Array.from(selectsActuales).map(select => select.value);
-            
+
             let numActual = valoresGuardados.length > 0 ? valoresGuardados.length : 1;
             contenedorDinamico.innerHTML = '';
             const posiciones = nombresPosiciones[numActual];
@@ -606,12 +559,12 @@
                 const num = i + 1;
                 const valorPrevio = valoresGuardados[i] || 'SingleCoil';
                 const rutaImagen = imagenesPastillas[valorPrevio];
-                
+
                 const bloqueHTML = `
                     <div class="bloque-pastilla" id="bloque_pastilla_${num}">
                         ${numActual > 1 ? `<button type="button" class="btn-eliminar" onclick="eliminarPastilla(${i})" aria-label="Eliminar pastilla">✕</button>` : ''}
                         <h3 class="label-posicion">Posición: ${posiciones[i]}</h3>
-                        
+
                         <div class="imagen-pastilla-contenedor">
                             <img src="${rutaImagen}" alt="Pastilla ${valorPrevio}" id="img_pastilla_${num}">
                         </div>
@@ -636,7 +589,7 @@
                 `;
                 contenedorDinamico.insertAdjacentHTML('beforeend', btnAddHTML);
             }
-            
+
             actualizarResumen();
         }
 
@@ -672,7 +625,7 @@
 
         const PRECIOS = {
             base: 800,
-            cuerpo: { stratocaster: 100, telecaster: 120, lespaul: 250 },
+            cuerpo: { 'Stratocaster': 100, 'Telecaster': 120, 'LesPaul': 250 },
             pastillas: { 'SingleCoil': 50, 'Humbucker': 80, 'P-90': 70 },
             extras: { estuche: 120, fundas: 45, setup: 0, garantia: 0 }
         };
@@ -691,7 +644,7 @@
 
             const textoCuerpo = textos.cuerpo[datos.cuerpo];
             document.getElementById('resumen-cuerpo').innerHTML = validarTexto(textoCuerpo);
-            if(datos.cuerpo) precioTotal += PRECIOS.cuerpo[datos.cuerpo];
+            if (datos.cuerpo && PRECIOS.cuerpo[datos.cuerpo]) precioTotal += PRECIOS.cuerpo[datos.cuerpo];
 
             const selectsPastillas = contenedorDinamico.querySelectorAll('select');
             let detallePastillas = [];
@@ -699,19 +652,19 @@
                 const tipo = sel.value;
                 const pos = nombresPosiciones[selectsPastillas.length][index];
                 detallePastillas.push(`${pos}: ${textos.tipo_pastilla[tipo]}`);
-                precioTotal += PRECIOS.pastillas[tipo];
+                if (PRECIOS.pastillas[tipo]) precioTotal += PRECIOS.pastillas[tipo];
             });
-            
-            document.getElementById('resumen-pastillas').innerHTML = selectsPastillas.length > 0 
-                ? `${selectsPastillas.length} pastilla(s)` 
+
+            document.getElementById('resumen-pastillas').innerHTML = selectsPastillas.length > 0
+                ? `${selectsPastillas.length} pastilla(s)`
                 : validarTexto();
-            document.getElementById('resumen-tipos-pastilla').innerHTML = detallePastillas.length > 0 
-                ? detallePastillas.join(' | ') 
+            document.getElementById('resumen-tipos-pastilla').innerHTML = detallePastillas.length > 0
+                ? detallePastillas.join(' | ')
                 : validarTexto();
 
             const dotCuerpo = `<span class="color-muestra-resumen" style="background:${datos.color_cuerpo}"></span>`;
             const dotMastil = `<span class="color-muestra-resumen" style="background:${datos.color_mastil}"></span>`;
-            document.getElementById('resumen-colores').innerHTML = 
+            document.getElementById('resumen-colores').innerHTML =
                 `${dotCuerpo} Cuerpo | ${dotMastil} Mástil`;
 
             const extrasSeleccionados = fd.getAll('extras');
@@ -728,16 +681,10 @@
         }
 
         form.addEventListener('input', (e) => {
-            if (e.target.name === 'pastillas') {
-                generarSelectoresPastillas();
-            }
             actualizarResumen();
         });
 
         form.addEventListener('change', (e) => {
-            if (e.target.name === 'pastillas') {
-                generarSelectoresPastillas();
-            }
             actualizarResumen();
         });
 
@@ -810,13 +757,13 @@
                 ctx.fill();
                 ctx.restore();
 
-                const triR = innerR - 6;
+                const triRv = innerR - 6;
                 const a0 = (hue - 90) * Math.PI / 180;
                 const a1 = a0 + (2 * Math.PI / 3);
                 const a2 = a0 - (2 * Math.PI / 3);
 
-                const px = [cx + triR*Math.cos(a0), cx + triR*Math.cos(a1), cx + triR*Math.cos(a2)];
-                const py = [cy + triR*Math.sin(a0), cy + triR*Math.sin(a1), cy + triR*Math.sin(a2)];
+                const px = [cx + triRv*Math.cos(a0), cx + triRv*Math.cos(a1), cx + triRv*Math.cos(a2)];
+                const py = [cy + triRv*Math.sin(a0), cy + triRv*Math.sin(a1), cy + triRv*Math.sin(a2)];
 
                 ctx.save();
                 ctx.beginPath();
@@ -830,13 +777,13 @@
                 gColor.addColorStop(0, `hsl(${hue},100%,50%)`);
                 gColor.addColorStop(1, '#ffffff');
                 ctx.fillStyle = gColor;
-                ctx.fillRect(cx - triR - 4, cy - triR - 4, (triR + 4) * 2, (triR + 4) * 2);
+                ctx.fillRect(cx - triRv - 4, cy - triRv - 4, (triRv + 4) * 2, (triRv + 4) * 2);
 
                 const gDark = ctx.createLinearGradient(px[2], py[2], (px[0]+px[1])/2, (py[0]+py[1])/2);
                 gDark.addColorStop(0, 'rgba(0,0,0,1)');
                 gDark.addColorStop(1, 'rgba(0,0,0,0)');
                 ctx.fillStyle = gDark;
-                ctx.fillRect(cx - triR - 4, cy - triR - 4, (triR + 4) * 2, (triR + 4) * 2);
+                ctx.fillRect(cx - triRv - 4, cy - triRv - 4, (triRv + 4) * 2, (triRv + 4) * 2);
 
                 ctx.restore();
 
@@ -984,8 +931,6 @@
                         input.value = val;
                     }
                 });
-
-                generarSelectoresPastillas();
 
                 for (let i = 1; i <= 3; i++) {
                     if (datos[`tipo_pastilla_${i}`]) {
