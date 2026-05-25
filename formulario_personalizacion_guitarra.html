@@ -110,26 +110,26 @@
                     <h3>Sistema de Clavijas</h3>
                     <div class="opciones-radio" role="radiogroup" aria-label="Tipo de Clavija">
                         <label class="opcion-tarjeta mini">
-                            <input type="radio" name="clavijas" value="vintage" id="clavija_vintage" checked required>
+                            <input type="radio" name="clavijas" value="Vintaje" id="clavija_vintage" checked required>
                             <div class="tarjeta-contenido">
                                 <img src="imgs/tensor_K.png" alt="Clavija tipo Kluson">
-                                <span>Vintage</span>
+                                <span>Vintaje</span>
                             </div>
                         </label>
 
                         <label class="opcion-tarjeta mini">
-                            <input type="radio" name="clavijas" value="moderno" id="clavija_moderno" required>
+                            <input type="radio" name="clavijas" value="Moderno" id="clavija_moderno" required>
                             <div class="tarjeta-contenido">
                                 <img src="imgs/clavmod.png" alt="Clavija moderna">
-                                <span>Moderno Sellado</span>
+                                <span>Moderno</span>
                             </div>
                         </label>
 
                         <label class="opcion-tarjeta mini">
-                            <input type="radio" name="clavijas" value="locking" id="clavija_locking" required>
+                            <input type="radio" name="clavijas" value="Locking" id="clavija_locking" required>
                             <div class="tarjeta-contenido">
                                 <img src="imgs/autoblock.png" alt="Clavija locking">
-                                <span>Locking (Estabilidad)</span>
+                                <span>Locking</span>
                             </div>
                         </label>
                     </div>
@@ -137,7 +137,7 @@
 
                 <!-- ENVOLTORIO NUEVO PARA LAS 2 COLUMNAS -->
                 <div class="contenedor-columnas">
-        
+
                     <!-- Cuerdas -->
                     <div class="subgrupo">
                         <h3>Número de Cuerdas</h3>
@@ -146,38 +146,6 @@
                                 <input type="radio" name="cuerdas" value="6" id="cuerdas_6" checked required>
                                 <span>6 cuerdas</span>
                                 <small>Estándar</small>
-                            </label>
-                            <label class="opcion-boton">
-                                <input type="radio" name="cuerdas" value="7" id="cuerdas_7" required>
-                                <span>7 cuerdas</span>
-                                <small>Extended Range</small>
-                            </label>
-                            <label class="opcion-boton">
-                                <input type="radio" name="cuerdas" value="8" id="cuerdas_8" required>
-                                <span>8 cuerdas</span>
-                                <small>Djent/Metal</small>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Trastes -->
-                    <div class="subgrupo">
-                        <h3>Número de Trastes</h3>
-                        <div class="opciones-radio" role="radiogroup" aria-label="Número de trastes">
-                            <label class="opcion-boton">
-                                <input type="radio" name="trastes" value="21" id="trastes_21" required>
-                                <span>21 trastes</span>
-                                <small>Vintage</small>
-                            </label>
-                            <label class="opcion-boton">
-                                <input type="radio" name="trastes" value="22" id="trastes_22" checked required>
-                                <span>22 trastes</span>
-                                <small>Estándar</small>
-                            </label>
-                            <label class="opcion-boton">
-                                <input type="radio" name="trastes" value="24" id="trastes_24" required>
-                                <span>24 trastes</span>
-                                <small>2 octavas completas</small>
                             </label>
                         </div>
                     </div>
@@ -188,19 +156,18 @@
                 <div class="subgrupo">
                     <h3>Material del Diapasón</h3>
                     <div class="selector-materiales" role="radiogroup" aria-label="Material del diapasón">
-                        
+
                         <label class="opcion-material">
-                            <input type="radio" name="diapason" value="arce" checked required>
-                            <!-- Asegúrate de tener una imagen de arce.jpg en tu carpeta imgs -->
-                            <div class="swatch-madera" style="background-image: url('imgs/arce.png');"></div>
+                            <input type="radio" name="diapason" value="Ebano" checked required>
+                            <div class="swatch-madera" style="background-image: url('imgs/ebano.png');"></div>
                             <div class="info-material">
-                                <span>Arce (Maple)</span>
-                                <small>Brillante, rápido</small>
+                                <span>Ebano</span>
+                                <small>Denso, articulado</small>
                             </div>
                         </label>
 
                         <label class="opcion-material">
-                            <input type="radio" name="diapason" value="palorosa" required>
+                            <input type="radio" name="diapason" value="Palorosa" required>
                             <div class="swatch-madera" style="background-image: url('imgs/palorosa.png');"></div>
                             <div class="info-material">
                                 <span>Palorosa</span>
@@ -209,51 +176,17 @@
                         </label>
 
                         <label class="opcion-material">
-                            <input type="radio" name="diapason" value="ebano" required>
-                            <div class="swatch-madera" style="background-image: url('imgs/ebano.png');"></div>
+                            <input type="radio" name="diapason" value="Abeto" required>
+                            <div class="swatch-madera" style="background-image: url('imgs/abeto.png');"></div>
                             <div class="info-material">
-                                <span>Ébano (Ebony)</span>
-                                <small>Denso, articulado</small>
-                            </div>
-                        </label>
-
-                        <label class="opcion-material">
-                            <input type="radio" name="diapason" value="pauferro" required>
-                            <div class="swatch-madera" style="background-image: url('imgs/pauferro.png');"></div>
-                            <div class="info-material">
-                                <span>Pau Ferro</span>
-                                <small>Punto medio</small>
+                                <span>Abeto</span>
+                                <small>Ligero, resonante</small>
                             </div>
                         </label>
 
                     </div>
                 </div>
 
-                <!-- Radio del diapasón -->
-                <div class="subgrupo">
-                    <h3>Radio del Diapasón</h3>
-                    
-                    <div class="contenedor-radio">
-                        <!-- El valor actual en grande -->
-                        <output for="radio_diapason" id="valor-radio">9.5"</output>
-                        
-                        <!-- El slider -->
-                        <input type="range" name="radio_diapason" id="radio_diapason" 
-                            min="7.25" max="20" step="0.25" value="9.5"
-                            list="marcas-radio">
-                            
-                        <datalist id="marcas-radio">
-                            <option value="7.25" label="Vintage"></option>
-                            <option value="9.5" label="Moderno"></option>
-                            <option value="12" label="Plano"></option>
-                            <option value="16" label="Super Plano"></option>
-                            <option value="20" label="Plano Total"></option>
-                        </datalist>
-                        
-                        <!-- Texto de ayuda -->
-                        <p class="info-radio">Menor = más curvado (acordes cómodos)<br>Mayor = más plano (shredding)</p>
-                    </div>
-                </div>
             </fieldset>
 
             <!-- PASO 4: COLORES -->
@@ -388,16 +321,8 @@
                         <span class="resumen-valor" id="resumen-cuerdas">6 cuerdas</span>
                     </div>
                     <div class="resumen-item">
-                        <span class="resumen-label">Trastes:</span>
-                        <span class="resumen-valor" id="resumen-trastes">22 trastes</span>
-                    </div>
-                    <div class="resumen-item">
                         <span class="resumen-label">Diapasón:</span>
-                        <span class="resumen-valor" id="resumen-diapason">Arce</span>
-                    </div>
-                    <div class="resumen-item">
-                        <span class="resumen-label">Radio:</span>
-                        <span class="resumen-valor" id="resumen-radio">9.5"</span>
+                        <span class="resumen-valor" id="resumen-diapason">Ebano</span>
                     </div>
                     <div class="resumen-item">
                         <span class="resumen-label">Colores:</span>
@@ -561,8 +486,6 @@
                 detalles: {
                     colorMastil: datos.color_mastil || '',
                     cuerdas:     datos.cuerdas || '',
-                    trastes:     datos.trastes || '',
-                    radioDiapason: datos.radio_diapason || '',
                     extras:      fd.getAll('extras')
                 }
             };
@@ -644,10 +567,10 @@
 
         const textos = {
             cuerpo: { stratocaster: 'Stratocaster', telecaster: 'Telecaster', lespaul: 'Les Paul' },
-            tensor: { vintage: 'Vintage Kluson', moderno: 'Moderno Sellado', locking: 'Locking' },
+            tensor: { 'Vintaje': 'Vintaje', 'Moderno': 'Moderno', 'Locking': 'Locking' },
             diapason: { arce: 'Arce', palorosa: 'Palorosa', ebano: 'Ébano', pauferro: 'Pau Ferro', richlite: 'Richlite' },
             acabado: { brillo: 'Brillo', satin: 'Satinado', mate: 'Mate', relic: 'Relic' },
-            tipo_pastilla: { single: 'Single Coil', humbucker: 'Humbucker', p90: 'P-90' }
+            tipo_pastilla: { 'P-90': 'P-90', 'SingleCoil': 'SingleCoil', 'Humbucker': 'Humbucker' }
         };
 
         const posicionesPastilla = {
@@ -666,9 +589,9 @@
         };
 
         const imagenesPastillas = {
-            single: 'imgs/single.png',
-            humbucker: 'imgs/humb.png',
-            p90: 'imgs/P90.png'
+            'SingleCoil': 'imgs/single.png',
+            'Humbucker': 'imgs/humb.png',
+            'P-90': 'imgs/P90.png'
         };
 
         function renderizarPastillasDinamicas() {
@@ -681,7 +604,7 @@
 
             for (let i = 0; i < numActual; i++) {
                 const num = i + 1;
-                const valorPrevio = valoresGuardados[i] || 'single';
+                const valorPrevio = valoresGuardados[i] || 'SingleCoil';
                 const rutaImagen = imagenesPastillas[valorPrevio];
                 
                 const bloqueHTML = `
@@ -695,9 +618,9 @@
 
                         <label for="tipo_pastilla_${num}" style="display:none;">Tipo de pastilla ${num}</label>
                         <select name="tipo_pastilla_${num}" id="tipo_pastilla_${num}" onchange="cambiarImagenPastilla(${num}, this.value); actualizarResumen();" required>
-                            <option value="single" ${valorPrevio === 'single' ? 'selected' : ''}>Single Coil</option>
-                            <option value="humbucker" ${valorPrevio === 'humbucker' ? 'selected' : ''}>Humbucker</option>
-                            <option value="p90" ${valorPrevio === 'p90' ? 'selected' : ''}>P-90</option>
+                            <option value="P-90" ${valorPrevio === 'P-90' ? 'selected' : ''}>P-90</option>
+                            <option value="SingleCoil" ${valorPrevio === 'SingleCoil' ? 'selected' : ''}>SingleCoil</option>
+                            <option value="Humbucker" ${valorPrevio === 'Humbucker' ? 'selected' : ''}>Humbucker</option>
                         </select>
                     </div>
                 `;
@@ -733,7 +656,7 @@
             const selects = contenedorDinamico.querySelectorAll('select');
             if (selects.length < maxPastillas) {
                 const divTemporal = document.createElement('select');
-                divTemporal.value = 'single';
+                divTemporal.value = 'SingleCoil';
                 contenedorDinamico.insertBefore(divTemporal, contenedorDinamico.lastElementChild);
                 renderizarPastillasDinamicas();
             }
@@ -750,7 +673,7 @@
         const PRECIOS = {
             base: 800,
             cuerpo: { stratocaster: 100, telecaster: 120, lespaul: 250 },
-            pastillas: { single: 50, humbucker: 80, p90: 70 },
+            pastillas: { 'SingleCoil': 50, 'Humbucker': 80, 'P-90': 70 },
             extras: { estuche: 120, fundas: 45, setup: 0, garantia: 0 }
         };
 
@@ -798,9 +721,7 @@
 
             document.getElementById('resumen-tensor').innerHTML = validarTexto(textos.tensor[datos.clavijas]);
             document.getElementById('resumen-cuerdas').innerHTML = validarTexto(datos.cuerdas ? datos.cuerdas + " cuerdas" : undefined);
-            document.getElementById('resumen-trastes').innerHTML = validarTexto(datos.trastes ? datos.trastes + " trastes" : undefined);
-            document.getElementById('resumen-diapason').innerHTML = validarTexto(textos.diapason[datos.diapason]);
-            document.getElementById('resumen-radio').innerHTML = datos.radio_diapason + '"';
+            document.getElementById('resumen-diapason').innerHTML = validarTexto(datos.diapason);
             document.getElementById('resumen-acabado').innerHTML = validarTexto(textos.acabado[datos.acabado]);
 
             document.getElementById('resumen-precio').textContent = precioTotal.toLocaleString('es-ES') + " €";
@@ -1036,14 +957,6 @@
 
         initRuedaColor('rueda-cuerpo', 'color_cuerpo', 'hex_cuerpo', 'preview-cuerpo', '#3B82F6');
         initRuedaColor('rueda-cuello', 'color_mastil', 'hex_mastil', 'preview-cuello', '#D4A574');
-
-        const rangeRadio = document.getElementById('radio_diapason');
-        const outputRadio = document.getElementById('valor-radio');
-        if (rangeRadio && outputRadio) {
-            rangeRadio.addEventListener('input', (e) => {
-                outputRadio.textContent = e.target.value + '"';
-            });
-        }
 
         window.addEventListener('load', () => {
             cargarUsuario();
