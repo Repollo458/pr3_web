@@ -13,22 +13,20 @@ app = Flask(__name__)
 app.secret_key = "cambia_esto_por_una_clave_secreta_segura_123456"
 # Modifica estas líneas en tu handle_sign_in.py
 app.config.update(
-    SESSION_COOKIE_SECURE=True,      
+    SESSION_COOKIE_SECURE=False,      
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="None", # Cambiado de None a Lax para evitar bloqueos en navegadores
+    SESSION_COOKIE_SAMESITE="Lax", # Cambiado de None a Lax para evitar bloqueos en navegadores
     PERMANENT_SESSION_LIFETIME=3600
 )
 
 # Cambia la configuración de CORS por esta más robusta
 CORS(app, resources={
     r"/*": {
-        "origins": ["https://repollo458.github.io"],
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
-        "supports_credentials": True,
-        "expose_headers": ["Set-Cookie"]
+        "origins": "*", # Permite cualquier origen, incluyendo 'null' de archivos locales
+        "supports_credentials": True
     }
 })
+
 DATABASE_URL = "postgresql://neondb_owner:npg_AGfr1VQl2dib@ep-restless-lab-al6gks8u-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 
 def get_db_connection():
@@ -208,32 +206,38 @@ def crear_pedido():
 
     data = request.get_json()
     user_id = session["user_id"]
-    
-    # Extraer datos del JSON enviado por el JS
-    # Nota: Asegúrate de que los nombres coincidan con los que envías en el JS
-    cuerpo = data.get("cuerpo")
-    pastillas = data.get("pastillas")
-    acabado = data.get("acabado")
-    precio = data.get("precio")
-    detalles = data.get("detalles") # Aquí puedes meter la config de pastillas, colores, etc.
+
+    # Extraer datos del JSON enviado por el JS (nombres alineados con el formulario)
+    tipo        = data.get("tipo")          # Forma del cuerpo
+    madera      = data.get("madera")        # Material del diapasón
+    color       = data.get("color")         # Color del cuerpo (hex)
+    acabado     = data.get("acabado")
+    pastilla    = data.get("pastilla")      # Configuración de pastillas
+    clavija     = data.get("clavija")
+    inscripcion = data.get("inscripcion")   # Grabado en el mástil
+    precio      = data.get("precio")
+    detalles    = data.get("detalles")      # JSON extra (colores, cuerdas, trastes...)
+
+    if not tipo:
+        return jsonify({"error": "Falta el tipo (forma) de la guitarra"}), 400
 
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        
-        # Insertar en la tabla pedido (ajusta los nombres de columnas a tu DB real)
+
         cursor.execute("""
-            INSERT INTO pedido (usuario_id, cuerpo, pastillas, acabado, precio, detalles)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO pedido
+                (usuario_id, tipo, madera, color, acabado, pastilla, clavija, inscripcion, precio, detalles)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
-        """, (user_id, cuerpo, pastillas, acabado, precio, detalles))
-        
+        """, (user_id, tipo, madera, color, acabado, pastilla, clavija, inscripcion, precio, detalles))
+
         nuevo_id = cursor.fetchone()[0]
         conn.commit()
-        
+
         return jsonify({
-            "success": True, 
+            "success": True,
             "message": "Pedido guardado con éxito",
             "pedido_id": nuevo_id
         }), 201
