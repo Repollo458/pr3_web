@@ -512,11 +512,13 @@
             let total = 0;
             itemsContainer.innerHTML = carrito.map((item, index) => {
                 total += item.precio;
+                const nombreCuerpo = textos.cuerpo[item.tipo] || item.tipo;
+                const nombreAcabado = textos.acabado[item.acabado] || item.acabado;
                 return `
                     <div class="carrito-item">
                         <div class="carrito-item-info">
-                            <span class="carrito-item-nombre">${item.cuerpo}</span>
-                            <span class="carrito-item-detalles">${item.pastillas} pastillas · ${item.acabado}</span>
+                            <span class="carrito-item-nombre">${nombreCuerpo}</span>
+                            <span class="carrito-item-detalles">${item.pastilla} · ${nombreAcabado}</span>
                         </div>
                         <div class="carrito-item-precio">${item.precio.toLocaleString('es-ES')} €</div>
                         <button type="button" class="btn-eliminar-item" onclick="eliminarDelCarrito(${index})">✕</button>
@@ -530,16 +532,41 @@
         function anadirAlCarrito() {
             const precioTexto = document.getElementById('resumen-precio').textContent;
             const precio = parseInt(precioTexto.replace(/\D/g, ''));
-            
+
+            // Leemos los valores CRUDOS del formulario (no los textos del resumen)
+            const fd = new FormData(form);
+            const datos = Object.fromEntries(fd);
+
+            // Configuración de pastillas: recogemos cada select dinámico con su posición
+            const selectsPastillas = contenedorDinamico.querySelectorAll('select');
+            const numPastillas = selectsPastillas.length;
+            const configPastillas = [];
+            selectsPastillas.forEach((sel, index) => {
+                const pos = nombresPosiciones[numPastillas][index];
+                configPastillas.push(`${pos}: ${textos.tipo_pastilla[sel.value]}`);
+            });
+
             const config = {
-                cuerpo: document.getElementById('resumen-cuerpo').textContent,
-                pastillas: document.getElementById('resumen-pastillas').textContent,
-                acabado: document.getElementById('resumen-acabado').textContent,
-                precio: precio,
-                colorCuerpo: document.getElementById('color_cuerpo').value,
-                colorMastil: document.getElementById('color_mastil').value
+                // Campos que van directos al JSON del pedido
+                tipo:        datos.cuerpo || '',                       // tipoPedido (Forma)
+                madera:      datos.diapason || '',                     // maderaPedido
+                color:       datos.color_cuerpo || '',                 // colorPedido (cuerpo)
+                acabado:     datos.acabado || '',                      // acabadoPedido
+                pastilla:    configPastillas.join(' | '),              // pastillaPedido
+                clavija:     datos.clavijas || '',                     // clavijaPedido
+                inscripcion: (datos.grabado || '').trim(),             // InscripcionPedido
+                precio:      precio,
+
+                // Datos extra que no van en el formato JSON pero conviene guardar
+                detalles: {
+                    colorMastil: datos.color_mastil || '',
+                    cuerdas:     datos.cuerdas || '',
+                    trastes:     datos.trastes || '',
+                    radioDiapason: datos.radio_diapason || '',
+                    extras:      fd.getAll('extras')
+                }
             };
-            
+
             carrito.push(config);
             actualizarCarritoUI();
             
@@ -564,20 +591,19 @@
                 return;
             }
 
-            // Vamos a enviar las guitarras una a una o el array completo. 
-            // Para este ejemplo, enviamos la primera guitarra del carrito.
-            const item = carrito[0]; 
+            // Enviamos la primera guitarra del carrito.
+            const item = carrito[0];
 
             const datosPedido = {
-                cuerpo: item.cuerpo,
-                pastillas: item.pastillas,
-                acabado: item.acabado,
-                precio: item.precio,
-                detalles: JSON.stringify({
-                    colorCuerpo: item.colorCuerpo,
-                    colorMastil: item.colorMastil,
-                    config_pastillas: document.getElementById('resumen-tipos-pastilla').textContent
-                })
+                tipo:        item.tipo,         // tipoPedido (Forma)
+                madera:      item.madera,       // maderaPedido
+                color:       item.color,        // colorPedido
+                acabado:     item.acabado,      // acabadoPedido
+                pastilla:    item.pastilla,     // pastillaPedido
+                clavija:     item.clavija,      // clavijaPedido
+                inscripcion: item.inscripcion,  // InscripcionPedido
+                precio:      item.precio,
+                detalles:    JSON.stringify(item.detalles)
             };
 
             try {
