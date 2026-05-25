@@ -206,32 +206,38 @@ def crear_pedido():
 
     data = request.get_json()
     user_id = session["user_id"]
-    
-    # Extraer datos del JSON enviado por el JS
-    # Nota: Asegúrate de que los nombres coincidan con los que envías en el JS
-    cuerpo = data.get("cuerpo")
-    pastillas = data.get("pastillas")
-    acabado = data.get("acabado")
-    precio = data.get("precio")
-    detalles = data.get("detalles") # Aquí puedes meter la config de pastillas, colores, etc.
+
+    # Extraer datos del JSON enviado por el JS (nombres alineados con el formulario)
+    tipo        = data.get("tipo")          # Forma del cuerpo
+    madera      = data.get("madera")        # Material del diapasón
+    color       = data.get("color")         # Color del cuerpo (hex)
+    acabado     = data.get("acabado")
+    pastilla    = data.get("pastilla")      # Configuración de pastillas
+    clavija     = data.get("clavija")
+    inscripcion = data.get("inscripcion")   # Grabado en el mástil
+    precio      = data.get("precio")
+    detalles    = data.get("detalles")      # JSON extra (colores, cuerdas, trastes...)
+
+    if not tipo:
+        return jsonify({"error": "Falta el tipo (forma) de la guitarra"}), 400
 
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        
-        # Insertar en la tabla pedido (ajusta los nombres de columnas a tu DB real)
+
         cursor.execute("""
-            INSERT INTO pedido (usuario_id, cuerpo, pastillas, acabado, precio, detalles)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO pedido
+                (usuario_id, tipo, madera, color, acabado, pastilla, clavija, inscripcion, precio, detalles)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
-        """, (user_id, cuerpo, pastillas, acabado, precio, detalles))
-        
+        """, (user_id, tipo, madera, color, acabado, pastilla, clavija, inscripcion, precio, detalles))
+
         nuevo_id = cursor.fetchone()[0]
         conn.commit()
-        
+
         return jsonify({
-            "success": True, 
+            "success": True,
             "message": "Pedido guardado con éxito",
             "pedido_id": nuevo_id
         }), 201
