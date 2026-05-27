@@ -426,8 +426,8 @@
             const selectsPastillas = contenedorDinamico.querySelectorAll('select');
             const numPastillas = selectsPastillas.length;
             const configPastillas = [];
-            selectsPastillas.forEach((sel, index) => {
-                configPastillas.push(`${index + 1}: ${sel.value}`);
+            selectsPastillas.forEach((sel) => {
+                configPastillas.push(sel.value);
             });
 
             const config = {
@@ -435,7 +435,7 @@
                 madera:      datos.diapason || '',
                 color:       datos.color_cuerpo || '',
                 acabado:     datos.acabado || '',
-                pastilla:    configPastillas.join(' \n '),
+                pastilla:    JSON.stringify(configPastillas),
                 clavija:     datos.clavijas || '',
                 inscripcion: (datos.grabado || '').trim(),
                 precio:      precio,
