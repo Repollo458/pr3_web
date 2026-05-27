@@ -50,7 +50,6 @@
     <main>
         <form id="configurador-guitarra" action="/procesar-pedido" method="POST">
 
-            <!-- PASO 1: CUERPO -->
             <fieldset class="grupo-configuracion" id="grupo-cuerpo">
                 <legend><h2 data-step="1">Cuerpo</h2></legend>
 
@@ -84,7 +83,6 @@
                 </div>
             </fieldset>
 
-            <!--PASO 2: Pastillas-->
             <fieldset class="grupo-configuracion" id="grupo-pastillas">
                 <legend><h2 data-step="2">Configuración de Pastillas</h2></legend>
                 <p style="color: var(--texto-secundario); margin-bottom: 20px;">Añade hasta 3 pastillas a tu configuración. La posición se ajustará automáticamente.</p>
@@ -93,7 +91,6 @@
                     </div>
             </fieldset>
 
-            <!-- PASO 3: MÁSTIL -->
             <fieldset class="grupo-configuracion" id="grupo-mastil">
                 <legend><h2 data-step="3">Configuración del Mástil</h2></legend>
 
@@ -175,7 +172,6 @@
 
             </fieldset>
 
-            <!-- PASO 4: COLORES -->
             <fieldset class="grupo-configuracion" id="grupo-colores">
                 <legend><h2 data-step="4">Personalización de Colores</h2></legend>
 
@@ -244,7 +240,6 @@
                 </div>
             </fieldset>
 
-            <!-- PASO 5: EXTRAS -->
             <fieldset class="grupo-configuracion" id="grupo-extras">
                 <legend><h2 data-step="5">Extras y Accesorios</h2></legend>
 
@@ -279,7 +274,6 @@
                 </div>
             </fieldset>
 
-            <!-- RESUMEN EN TIEMPO REAL -->
             <fieldset class="grupo-configuracion resumen-activo" id="grupo-resumen">
                 <legend><h2 data-step="✦">Resumen del Pedido</h2></legend>
 
@@ -294,7 +288,7 @@
                     </div>
                     <div class="resumen-item">
                         <span class="resumen-label">Config. pastillas:</span>
-                        <span class="resumen-valor" id="resumen-tipos-pastilla">Puente: Single Coil | Mástil: Single Coil</span>
+                        <span class="resumen-valor" id="resumen-tipos-pastilla">1: SingleCoil, 2: SingleCoil</span>
                     </div>
                     <div class="resumen-item">
                         <span class="resumen-label">Tensores:</span>
@@ -423,16 +417,10 @@
             const fd = new FormData(form);
             const datos = Object.fromEntries(fd);
 
-            // Configuración de pastillas: solo las seleccionadas, formato 1:SingleCoil, 2:Humbucker...
             const selectsPastillas = contenedorDinamico.querySelectorAll('select');
             const configPastillas = [];
             selectsPastillas.forEach((sel, index) => {
-                const tipoRaw = sel.value; // single, humbucker, p90
-                const tipoFormateado = tipoRaw === 'single' ? 'SingleCoil' :
-                                       tipoRaw === 'humbucker' ? 'Humbucker' : 'P90';
-                configPastillas.push(`${index + 1}: ${tipoFormateado}`);
-            });
-            const pastillaString = configPastillas.join(', ');
+                configPastillas.push(`${index + 1}: ${textos.tipo_pastilla[sel.value]}`);
             });
 
             const config = {
@@ -440,7 +428,7 @@
                 madera:      datos.diapason || '',
                 color:       datos.color_cuerpo || '',
                 acabado:     datos.acabado || '',
-                pastilla:    pastillaString,
+                pastilla:    configPastillas.join(', '),
                 clavija:     datos.clavijas || '',
                 inscripcion: (datos.grabado || '').trim(),
                 precio:      precio,
@@ -654,8 +642,7 @@
             let detallePastillas = [];
             selectsPastillas.forEach((sel, index) => {
                 const tipo = sel.value;
-                const pos = nombresPosiciones[selectsPastillas.length][index];
-                detallePastillas.push(`${pos}: ${textos.tipo_pastilla[tipo]}`);
+                detallePastillas.push(`${index + 1}: ${textos.tipo_pastilla[tipo]}`);
                 if (PRECIOS.pastillas[tipo]) precioTotal += PRECIOS.pastillas[tipo];
             });
 
@@ -663,7 +650,7 @@
                 ? `${selectsPastillas.length} pastilla(s)`
                 : validarTexto();
             document.getElementById('resumen-tipos-pastilla').innerHTML = detallePastillas.length > 0
-                ? detallePastillas.join(' | ')
+                ? detallePastillas.join(', ')
                 : validarTexto();
 
             const dotCuerpo = `<span class="color-muestra-resumen" style="background:${datos.color_cuerpo}"></span>`;
@@ -888,64 +875,4 @@
                 const hex = getColor();
                 hiddenInput.value = hex;
                 hexDisplay.textContent = hex.toUpperCase();
-                preview.style.background = hex;
-                actualizarResumen();
-            }
-
-            canvas.addEventListener('mousedown',  e => { dragging = null; updateFromEvent(e); });
-            canvas.addEventListener('touchstart',  e => { e.preventDefault(); dragging = null; updateFromEvent(e); }, { passive: false });
-            window.addEventListener('mousemove',  e => { if (dragging) updateFromEvent(e); });
-            window.addEventListener('touchmove',  e => { if (dragging) { e.preventDefault(); updateFromEvent(e); } }, { passive: false });
-            window.addEventListener('mouseup',    () => dragging = null);
-            window.addEventListener('touchend',   () => dragging = null);
-
-            const initHSB = hexToHSB(initialColor);
-            hue = initHSB.h;
-            triSat = initHSB.s;
-            triBri = initHSB.b;
-            drawWheel();
-        }
-
-        initRuedaColor('rueda-cuerpo', 'color_cuerpo', 'hex_cuerpo', 'preview-cuerpo', '#3B82F6');
-        initRuedaColor('rueda-cuello', 'color_mastil', 'hex_mastil', 'preview-cuello', '#D4A574');
-
-        window.addEventListener('load', () => {
-            cargarUsuario();
-            renderizarPastillasDinamicas();
-
-            const guardado = localStorage.getItem('configGuitarra');
-            if (guardado) {
-                const datos = JSON.parse(guardado);
-
-                Object.keys(datos).forEach(key => {
-                    if (key.startsWith('tipo_pastilla_')) return;
-
-                    const val = datos[key];
-                    const input = form.elements[key];
-                    if (!input) return;
-
-                    if (input.type === 'checkbox') {
-                        input.checked = true;
-                    } else if (input.type === 'radio') {
-                        const radio = form.querySelector(`[name="${key}"][value="${val}"]`);
-                        if (radio) radio.checked = true;
-                    } else if (input.tagName === 'SELECT') {
-                        input.value = val;
-                    } else {
-                        input.value = val;
-                    }
-                });
-
-                for (let i = 1; i <= 3; i++) {
-                    if (datos[`tipo_pastilla_${i}`]) {
-                        const sel = document.getElementById(`tipo_pastilla_${i}`);
-                        if (sel) sel.value = datos[`tipo_pastilla_${i}`];
-                    }
-                }
-
-                actualizarResumen();
-            }
-        });
-    </script>
-</body>
-</html>
+                preview.style.
