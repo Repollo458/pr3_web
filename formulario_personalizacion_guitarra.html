@@ -423,12 +423,16 @@
             const fd = new FormData(form);
             const datos = Object.fromEntries(fd);
 
+            // Configuración de pastillas: solo las seleccionadas, formato 1:SingleCoil, 2:Humbucker...
             const selectsPastillas = contenedorDinamico.querySelectorAll('select');
-            const numPastillas = selectsPastillas.length;
             const configPastillas = [];
             selectsPastillas.forEach((sel, index) => {
-                const pos = nombresPosiciones[numPastillas][index];
-                configPastillas.push(`${pos}: ${textos.tipo_pastilla[sel.value]}`);
+                const tipoRaw = sel.value; // single, humbucker, p90
+                const tipoFormateado = tipoRaw === 'single' ? 'SingleCoil' :
+                                       tipoRaw === 'humbucker' ? 'Humbucker' : 'P90';
+                configPastillas.push(`${index + 1}: ${tipoFormateado}`);
+            });
+            const pastillaString = configPastillas.join(', ');
             });
 
             const config = {
@@ -436,7 +440,7 @@
                 madera:      datos.diapason || '',
                 color:       datos.color_cuerpo || '',
                 acabado:     datos.acabado || '',
-                pastilla:    configPastillas.join(' | '),
+                pastilla:    pastillaString,
                 clavija:     datos.clavijas || '',
                 inscripcion: (datos.grabado || '').trim(),
                 precio:      precio,
