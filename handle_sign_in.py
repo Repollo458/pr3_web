@@ -12,6 +12,7 @@ app = Flask(__name__)
 # =========================================
 app.secret_key = "cambia_esto_por_una_clave_secreta_segura_123456"
 # Modifica estas líneas en tu handle_sign_in.py
+# DESPUÉS
 app.config.update(
     SESSION_COOKIE_SECURE=True,       # Render usa HTTPS
     SESSION_COOKIE_SAMESITE="None",   # Permite cross-site
@@ -21,7 +22,7 @@ app.config.update(
 
 CORS(app, resources={
     r"/*": {
-        "origins": ["https://repollo458.github.io/pr3_web/formulario_personalizacion_guitarra.html", "http://127.0.0.1:5500"],  # ← tu origen real
+        "origins": ["https://repollo458.github.io/pr3_web", "http://127.0.0.1:5500"],  # ← tu origen real
         "supports_credentials": True
     }
 })
