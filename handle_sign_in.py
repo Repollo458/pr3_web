@@ -22,7 +22,7 @@ app.config.update(
 
 CORS(app, resources={
     r"/*": {
-        "origins": ["https://repollo458.github.io/pr3_web", "http://127.0.0.1:5500"],  # ← tu origen real
+        "origins": ["https://repollo458.github.io", "http://127.0.0.1:5500"],  # ← tu origen real
         "supports_credentials": True
     }
 })
