@@ -427,8 +427,7 @@
             const numPastillas = selectsPastillas.length;
             const configPastillas = [];
             selectsPastillas.forEach((sel, index) => {
-                const pos = nombresPosiciones[numPastillas][index];
-                configPastillas.push(`${pos}: ${textos.tipo_pastilla[sel.value]}`);
+                configPastillas.push(`${index + 1}: ${sel.value}`);
             });
 
             const config = {
@@ -436,7 +435,7 @@
                 madera:      datos.diapason || '',
                 color:       datos.color_cuerpo || '',
                 acabado:     datos.acabado || '',
-                pastilla:    configPastillas.join(' | '),
+                pastilla:    configPastillas.join(' \n '),
                 clavija:     datos.clavijas || '',
                 inscripcion: (datos.grabado || '').trim(),
                 precio:      precio,
