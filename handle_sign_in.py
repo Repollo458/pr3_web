@@ -12,17 +12,17 @@ app = Flask(__name__)
 # =========================================
 app.secret_key = "cambia_esto_por_una_clave_secreta_segura_123456"
 # Modifica estas líneas en tu handle_sign_in.py
+# DESPUÉS
 app.config.update(
-    SESSION_COOKIE_SECURE=False,      
+    SESSION_COOKIE_SECURE=True,       # Render usa HTTPS
+    SESSION_COOKIE_SAMESITE="None",   # Permite cross-site
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Lax", # Cambiado de None a Lax para evitar bloqueos en navegadores
     PERMANENT_SESSION_LIFETIME=3600
 )
 
-# Cambia la configuración de CORS por esta más robusta
 CORS(app, resources={
     r"/*": {
-        "origins": "*", # Permite cualquier origen, incluyendo 'null' de archivos locales
+        "origins": ["https://repollo458.github.io/pr3_web", "http://127.0.0.1:5500"],  # ← tu origen real
         "supports_credentials": True
     }
 })
